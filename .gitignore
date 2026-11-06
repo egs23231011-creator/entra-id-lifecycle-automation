@@ -1,0 +1,6 @@
+*.pfx
+*.cer
+*.key
+offboard-log-*.csv
+joiner-log-*.csv
+notes.md
