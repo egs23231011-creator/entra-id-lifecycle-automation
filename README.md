@@ -9,7 +9,7 @@ PowerShell automation for the Joiner-Mover-Leaver lifecycle in Microsoft Entra I
 | Workflow | Script | Status |
 | --- | --- | --- |
 | Leaver (offboarding) | `scripts/Offboard-Users.ps1` | Built and tested in lab |
-| Joiner (onboarding) | `scripts/New-Joiner.ps1` | In progress |
+| Joiner (onboarding) | `scripts/New-Joiner.ps1` | Built and tested in lab |
 | Mover (department change) | n/a | Planned |
 
 ## Leaver workflow
@@ -24,6 +24,28 @@ For each user in a CSV, in this order:
 
 **Why this order.** Disabling first stops new sign-ins, so a user cannot start a fresh session in the gap before sessions are revoked. Revoking sessions invalidates refresh tokens. Access tokens that were already issued can stay valid for a limited time unless Continuous Access Evaluation applies, so revocation is not instant.
 
+## Joiner workflow
+
+For each row in a CSV (`FirstName`, `LastName`, `Department`, `JobTitle`, optional `ManagerUPN`):
+
+1. Validate the row: names present and the department exists in the access policy map.
+2. Skip the user if the account already exists, so re-runs are safe.
+3. Create the user with a random password and a forced change at first sign-in.
+4. Assign the license.
+5. Add the department's groups (for example, Sales gets All-Staff and Sales).
+6. Set the manager, if one is given.
+
+Input example:
+
+```csv
+FirstName,LastName,Department,JobTitle,ManagerUPN
+Maya,Chen,Sales,Account Executive,manager@yourtenant.onmicrosoft.com
+Dev,Patel,Engineering,Support Engineer,
+```
+
+Lab result: two valid rows were created, licensed, grouped, and (for one) given a manager; a row with an unknown department was rejected by validation. Re-run: TODO (fill in after running it a second time).
+
+Lab shortcut: the random password is never shown. A production workflow would use a Temporary Access Pass or a similar controlled onboarding step.
 ## Design
 
 **Authentication.** The script signs in as an app registration using a certificate, so it can run unattended with no password or client secret. The private key stays in the certificate store and is marked non-exportable.
