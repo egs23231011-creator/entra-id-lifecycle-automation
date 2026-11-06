@@ -4,3 +4,6 @@
 offboard-log-*.csv
 joiner-log-*.csv
 notes.md
+Seed-Lab.ps1
+leavers.csv
+run*.csv
