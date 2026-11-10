@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Lab project: bulk Leaver (offboarding) automation for Microsoft Entra ID via Microsoft Graph.
 
@@ -112,7 +112,7 @@ foreach ($row in $rows) {
     }
 
     # 5. Remove directly assigned licenses (group-based licenses go with the group removal)
-    try   { $skus = @((Get-MgUserLicenseDetail -UserId $user.Id).SkuId) }
+    try   { $skus = @((Get-MgUserLicenseDetail -UserId $user.Id).SkuId | Where-Object { $_ }) }
     catch { Write-Audit $upn 'List licenses' 'Failed' $_.Exception.Message; $skus = @() }
     if ($skus.Count -gt 0) {
         Invoke-Step $PSCmdlet $upn "Remove $($skus.Count) license(s)" {

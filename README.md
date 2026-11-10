@@ -126,7 +126,7 @@ See `samples/sample-audit-log.csv` for a full run. Tenant details are replaced w
 
 - Test setup: 3 users to offboard, 1 control user, and 1 invalid account in the CSV.
 - Real run: all 18 steps for the 3 users succeeded; the invalid account was logged as a failed lookup and skipped; the control user was unchanged.
-- Re-run: TODO (fill in after running the script a second time).
+- Re-run: a second Leaver run exposed a bug (license removal failed for users with no licenses left). After the fix the re-run completes cleanly. The Joiner re-run skipped existing users and rejected the invalid department again.
 - ![Leaver: before](docs/screenshots/leaver1-before.png)
 ![Leaver: after](docs/screenshots/leaver1-after.png)
 ![Joiner: result](docs/screenshots/joiner-maya-after.png)
@@ -144,6 +144,7 @@ See `samples/sample-audit-log.csv` for a full run. Tenant details are replaced w
 - Graph cmdlets can emit non-terminating errors that `try/catch` misses, which let a failed lookup continue and could log failures as successes. Fixed by defaulting all Graph cmdlets to `-ErrorAction Stop`.
 - `-WhatIf` propagated into `Export-Csv`, so dry runs wrote no audit log. Fixed with `-WhatIf:$false` on the export.
 - A trailing space in a pasted Client ID caused an authentication failure that looked like a certificate problem.
+- Re-running the Leaver script found a defect: for a user with no licenses, a one-item list holding an empty value was counted as a license, so removal failed with a bad GUID. Filtering empty values fixed it.
 
 ## Future work
 
