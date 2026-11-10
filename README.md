@@ -43,7 +43,7 @@ Maya,Chen,Sales,Account Executive,manager@yourtenant.onmicrosoft.com
 Dev,Patel,Engineering,Support Engineer,
 ```
 
-Lab result: two valid rows were created, licensed, grouped, and (for one) given a manager; a row with an unknown department was rejected by validation. Re-run: TODO (fill in after running it a second time).
+Lab result: two valid rows were created, licensed, grouped, and (for one) given a manager; a row with an unknown department was rejected by validation.
 
 Lab shortcut: the random password is never shown. A production workflow would use a Temporary Access Pass or a similar controlled onboarding step.
 ## Design
@@ -127,7 +127,9 @@ See `samples/sample-audit-log.csv` for a full run. Tenant details are replaced w
 - Test setup: 3 users to offboard, 1 control user, and 1 invalid account in the CSV.
 - Real run: all 18 steps for the 3 users succeeded; the invalid account was logged as a failed lookup and skipped; the control user was unchanged.
 - Re-run: TODO (fill in after running the script a second time).
-- Screenshots: TODO (add before/after images to `docs/screenshots/` after scrubbing tenant names and emails).
+- ![Leaver: before](docs/screenshots/leaver1-before.png)
+![Leaver: after](docs/screenshots/leaver1-after.png)
+![Joiner: result](docs/screenshots/joiner-maya-after.png)
 
 ## Known limitations
 
